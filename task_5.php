@@ -5,28 +5,39 @@
 // password should include lowercase letters, uppercase letters, numbers, and special characters (!@#$%^&*()_+). Write a
 // PHP program to generate a password with a length of 12 characters using this function and print the password.
 
-
 function generatePassword($length)
 {
-    $lowsercaseLetter = implode("", range('a', 'z'));
-    $upperercaseLetter = implode("", range('A', 'Z'));
-    $numbers = implode("", range(0, 9));
-    $symbol = "!@#$%^&*()_+";
+    $uppercaseLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $lowercaseLetters = 'abcdefghijklmnopqrstuvwxyz';
+    $numbers = '0123456789';
+    $symbols = '!@#$%^&*()_+';
 
-    $password = ($lowsercaseLetter . $upperercaseLetter . $numbers . $symbol);
-    $generateedPassword = substr(str_shuffle($password), 0, $length);
-    echo $generateedPassword;
+    $requiredChars = $uppercaseLetters . $lowercaseLetters . $symbols . $numbers;
+
+    $password = '';
+
+    // Add at least one uppercase letter
+    $password .= $uppercaseLetters[rand(0, strlen($uppercaseLetters) - 1)];
+
+    // Add at least one lowercase letter
+    $password .= $lowercaseLetters[rand(0, strlen($lowercaseLetters) - 1)];
+
+    // Add at least one symbol
+    $password .= $symbols[rand(0, strlen($symbols) - 1)];
+
+    // The remaining characters are randomly selected from the pool
+    for ($i = 0; $i < ($length - 3); $i++) {
+        $randomChar = $requiredChars[rand(0, strlen($requiredChars) - 1)];
+        $password .= $randomChar;
+    }
+
+    // Shuffle the password to ensure randomness
+    $password = str_shuffle($password);
+
+    return $password;
 }
-generatePassword(12);
 
+$password = generatePassword(12);
 
-// Solution2:
-
-// function generatePassword($length){
-
-//     $char="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
-
-//     $password= substr(str_shuffle($char),0,$length);
-//     echo $password;
-// }
-// generatePassword(12);
+// Print the generated password
+echo $password;
